@@ -76,11 +76,12 @@ decreasing.
 pkg <- installed.packages()[, "Package"]
 loadpkg <- c("ggplot2","rworldmap", "reshape2","RColorBrewer","ggplus") 
 
+library(devtools)
 devtools::install_github("guiastrennec/ggplus")
 
 # install pkg if necessary
 for ( i in 1:length(loadpkg) ){
-  if(!(loadpkg[i] %in% pkg)) { 
+  if(!(loadpkg[i] %in% pkg)) {
     install.packages(loadpkg[i]) 
   }
 }
@@ -144,8 +145,7 @@ for(i in 1:length(cols)){
 # picking a color palette for uniform plotting, custom colors for better 
 # representation of the data.
 
-clr <- c("black","gray10","midnightblue","red4","orangered3","darkorange",
-          "darkgoldenrod1","darkolivegreen3","forestgreen","darkgreen")
+clr <- c("black",brewer.pal(11,"RdGy")[c(11,10,1)], brewer.pal(6,"RdYlGn"))
 
 ```
 \newpage
@@ -229,7 +229,9 @@ p1 + geom_line(aes(color = summBEL$variable),group = summBEL$variable, size=2)+
   scale_color_manual(values=clr[c(a,b,c)]) + 
   theme_light() + 
   theme(plot.margin=margin(1, 1, 1, 1, "cm"), 
-        plot.title = element_text(hjust = 0.5))
+        plot.title = element_text(hjust = 0.5))+
+  annotate("text", x=.75, y=c(a,b,c)+.2,label = c("PF","EF","HF"), 
+           color=clr[c(a,b,c)])
 
 ```
 
@@ -254,7 +256,7 @@ p2 <-ggplot(BELdata, value.name=titles,aes(x=variable,y=value, fill=value))+
     geom_col(position="dodge")+
     ylim(0,10) +
     coord_flip()+
-    scale_fill_gradient2( midpoint=5, low=clr[4], mid=clr[6],high=clr[10]) +
+    scale_fill_gradient2( midpoint=5, low=clr[5], mid=clr[7],high=clr[9]) +
     labs(title="Areas of Freedom for Belgium in 2016",x=element_blank(), 
           y=element_blank()) +
     theme_light() +
@@ -300,7 +302,7 @@ mapParams <- mapCountryData(sPDF, nameColumnToPlot="pf_movement_women",
                             mapTitle="Women's freedom by law to move outside the 
                             home 2016", 
                             catMethod="categorical",
-                            colourPalette=clr[c(4,6,10)])
+                            colourPalette=clr[c(5,7,9)])
 
 ```
 \elandscape
